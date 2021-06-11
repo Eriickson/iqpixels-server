@@ -28,14 +28,14 @@ export class ProductController {
   async updateProduct(req: Request, res: Response) {
     const { name, price, category, stock } = req.body;
 
-    const productSaved = await productProvider.updateProduct(req.params.id, {
+    const productUpdated = await productProvider.updateProduct(req.params.id, {
       name,
       price,
       category,
       stock,
     });
 
-    res.json({ product: productSaved });
+    res.json({ product: productUpdated });
   }
   async deleteProduct(req: Request, res: Response) {
     await productProvider.deleteProduct(req.params.id);
