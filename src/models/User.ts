@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -22,13 +22,19 @@ const userSchema = new Schema(
       required: true,
       trim: true,
       unique: true,
-      lowercase: true
+      lowercase: true,
     },
     password: {
       type: String,
       required: true,
       trim: true,
     },
+    markets: [
+      {
+        ref: "Market",
+        type: Types.ObjectId,
+      },
+    ],
   },
   {
     versionKey: false,

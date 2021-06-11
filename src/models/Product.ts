@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const productSchema = new Schema(
   {
@@ -6,6 +6,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     price: {
       type: String,
@@ -21,6 +22,14 @@ const productSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    stock: {
+      type: Number,
+      required: true,
+    },
+    market: {
+      type: Types.ObjectId,
+      ref: "Market",
     },
   },
   {

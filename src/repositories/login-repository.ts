@@ -1,4 +1,4 @@
-import {} from '../entities'
+import { IUser } from "../entities";
 
 export interface LoginRepository {
   registerUser(newUser: IUser): Promise<any>;

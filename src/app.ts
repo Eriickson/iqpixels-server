@@ -1,7 +1,8 @@
 require("dotenv").config({});
 import express from "express";
-import { envs,startMongoose } from "./configs";
+import { envs, startMongoose } from "./configs";
 import { LoginRoutes, MarketRoutes, ProductRoutes, UserRoutes } from "./routes";
+import { authenticateToken } from "./middleware";
 
 export class App {
   public app: express.Application;
@@ -26,9 +27,9 @@ export class App {
 
   private configRoutes() {
     this.app.use("/api/login", this.loginRoutes);
-    this.app.use("/api/market", this.marketRoutes);
-    this.app.use("/api/product", this.productRoutes);
-    this.app.use("/api/user", this.userRoutes);
+    this.app.use("/api/market", authenticateToken, this.marketRoutes);
+    this.app.use("/api/product", authenticateToken, this.productRoutes);
+    this.app.use("/api/user", authenticateToken, this.userRoutes);
   }
 
   public listen() {
