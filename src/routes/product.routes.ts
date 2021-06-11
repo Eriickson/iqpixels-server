@@ -5,12 +5,12 @@ import { constrollers } from "../controllers";
 export class ProductRoutes {
   public route() {
     const router = express.Router();
-    // router.get("/", constrollers.market.getMarket);
+    router.get("/", constrollers.product.getProducts);
     // router.get("/search", constrollers.market.searchMarket);
-    // router.get("/:id", constrollers.market.getByIdMarket);
+    router.get("/:id", constrollers.product.getProductById);
     router.post("/:idMarket", constrollers.product.createProduct);
-    // router.put("/:id", constrollers.market.editMarket);
-    // router.delete("/:id", constrollers.market.deleteMarket);
+    router.put("/:id", constrollers.product.updateProduct);
+    router.delete("/:id", constrollers.product.deleteProduct);
     return router;
   }
 }
