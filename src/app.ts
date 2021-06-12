@@ -1,7 +1,7 @@
 require("dotenv").config({});
 import express from "express";
 import cors from "cors";
-import { envs, startMongoose } from "./configs";
+import { envs, startMongoose, Swagger } from "./configs";
 import { LoginRoutes, MarketRoutes, ProductRoutes, UserRoutes } from "./routes";
 import { authenticateToken } from "./middleware";
 
@@ -12,6 +12,7 @@ export class App {
   private productRoutes = new ProductRoutes().route();
   private userRoutes = new UserRoutes().route();
   private port: number;
+  private swagger = new Swagger();
 
   constructor() {
     this.app = express();
@@ -32,6 +33,7 @@ export class App {
     this.app.use("/api/market", authenticateToken, this.marketRoutes);
     this.app.use("/api/product", authenticateToken, this.productRoutes);
     this.app.use("/api/user", authenticateToken, this.userRoutes);
+    this.app.use(this.swagger.route, this.swagger.serve, this.swagger.specs);
   }
 
   public listen() {

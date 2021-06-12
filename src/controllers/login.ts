@@ -35,7 +35,7 @@ export class LoginController {
         expiresIn: "24h",
       });
       console.log(token);
-      
+
       res.status(201).json({ token });
     } catch (err) {
       console.log(err);
