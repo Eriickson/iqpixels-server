@@ -42,7 +42,6 @@ export class LoginController {
   }
   async signIn(req: Request, res: Response) {
     const { email, password } = req.body;
-    console.log({ email, password });
     const userFound = await User.findOne({ $and: [{ email }] });
 
     if (!userFound)

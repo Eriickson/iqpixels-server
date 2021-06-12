@@ -1,13 +1,10 @@
 import { ProductRepository } from "../repositories";
 import { IProduct } from "../entities";
 import { Product, Market } from "../models";
-import { Types } from "mongoose";
 
 export class ProductProvider implements ProductRepository {
   async getProducts(idMarket: string) {
     try {
-      console.log(idMarket);
-
       const productsFound: IProduct = await Product.find({ market: idMarket });
       return productsFound;
     } catch (err) {
@@ -55,8 +52,6 @@ export class ProductProvider implements ProductRepository {
     }
   }
   async deleteProduct(idToDelete: string, idMarket: string) {
-    console.log({ idMarket, idToDelete });
-
     try {
       await Product.findByIdAndRemove(idToDelete);
       await Market.findByIdAndUpdate(
