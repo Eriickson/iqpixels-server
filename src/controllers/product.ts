@@ -22,7 +22,6 @@ export class ProductController {
       category,
       stock,
       market: req.params.idMarket,
-      image: "imagen",
     });
 
     res.json({ product: productSaved });

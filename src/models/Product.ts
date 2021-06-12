@@ -6,7 +6,6 @@ const productSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     price: {
       type: String,
@@ -14,11 +13,6 @@ const productSchema = new Schema(
       trim: true,
     },
     category: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    image: {
       type: String,
       required: true,
       trim: true,
@@ -35,7 +29,7 @@ const productSchema = new Schema(
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
 export const Product = model("Product", productSchema);
