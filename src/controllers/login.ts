@@ -10,12 +10,19 @@ export class LoginController {
 
     const userFound = await User.findOne({ email });
 
-    if (userFound) return res.json({ error: "Este correo electrónico ya está registrado" });
+    if (userFound)
+      return res.json({ error: "Este correo electrónico ya está registrado" });
 
     const salt = bcrypt.genSaltSync(12);
     const passwordHash = bcrypt.hashSync(password, salt);
 
-    const newUser = new User({ name, lastname, birthday, email, password: passwordHash });
+    const newUser = new User({
+      name,
+      lastname,
+      birthday,
+      email,
+      password: passwordHash,
+    });
 
     try {
       await newUser.save();
@@ -25,7 +32,9 @@ export class LoginController {
         email,
       };
 
-      const token = jwt.sign(payload, envs.SECRECT_TOKEN_LOGIN, { expiresIn: "24h" });
+      const token = jwt.sign(payload, envs.SECRECT_TOKEN_LOGIN, {
+        expiresIn: "24h",
+      });
       res.status(201).json({ token });
     } catch (err) {
       console.log(err);
@@ -36,18 +45,22 @@ export class LoginController {
     console.log({ email, password });
     const userFound = await User.findOne({ $and: [{ email }] });
 
-    if (!userFound) return res.json({ error: "Correo electrónico con contraseña incorrectos" });
+    if (!userFound)
+      throw new Error("Correo electrónico o contraseña incorrectos");
 
     const passwordHash = bcrypt.compareSync(password, userFound.password);
 
-    if (!passwordHash) return res.json({ error: "Correo electrónico con contraseña incorrectos" });
+    if (!passwordHash)
+      throw new Error("Correo electrónico o contraseña incorrectos");
 
     const payload = {
       id: userFound._id,
       email,
     };
 
-    const token = jwt.sign(payload, envs.SECRECT_TOKEN_LOGIN, { expiresIn: "24h" });
+    const token = jwt.sign(payload, envs.SECRECT_TOKEN_LOGIN, {
+      expiresIn: "24h",
+    });
 
     res.json({ token });
   }

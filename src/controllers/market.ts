@@ -18,6 +18,8 @@ export class MarketController {
   async createMarket(req: Request, res: Response) {
     const { name, direction } = req.body;
 
+    console.log(req.user);
+
     const marketSaved = await marketProvider.createMarket({
       name,
       direction,

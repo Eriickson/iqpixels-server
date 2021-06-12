@@ -1,6 +1,6 @@
 import { MarketRepository } from "../repositories";
 import { IMarket } from "../entities";
-import { Market, User } from "../models";
+import { Market, User, Product } from "../models";
 
 export class MarketProvider implements MarketRepository {
   async createMarket(marketData: Omit<IMarket, "id">) {
@@ -12,7 +12,7 @@ export class MarketProvider implements MarketRepository {
         { _id: marketData.owner },
         {
           $push: { markets: marketSaved.id },
-        },
+        }
       );
 
       return marketSaved;
@@ -45,7 +45,7 @@ export class MarketProvider implements MarketRepository {
       const marketUpdated = await Market.findByIdAndUpdate(
         id,
         { $set: dataToUpdate },
-        { new: true },
+        { new: true }
       );
 
       return marketUpdated;
@@ -55,6 +55,14 @@ export class MarketProvider implements MarketRepository {
   }
   async deleteMarket(id: string) {
     try {
+      const marketFound = await Market.findById(id);
+
+      await Promise.all(
+        marketFound.products.map((product: string) => {
+          return Product.findByIdAndRemove(product);
+        })
+      );
+
       await Market.findByIdAndRemove(id);
     } catch (err) {
       throw new Error(err);

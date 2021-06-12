@@ -1,5 +1,6 @@
 require("dotenv").config({});
 import express from "express";
+import cors from "cors";
 import { envs, startMongoose } from "./configs";
 import { LoginRoutes, MarketRoutes, ProductRoutes, UserRoutes } from "./routes";
 import { authenticateToken } from "./middleware";
@@ -22,7 +23,8 @@ export class App {
   private config() {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
-    startMongoose(envs.URI_MONGODB)
+    this.app.use(cors());
+    startMongoose(envs.URI_MONGODB);
   }
 
   private configRoutes() {

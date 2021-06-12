@@ -4,8 +4,10 @@ import { ProductProvider } from "../providers";
 const productProvider = new ProductProvider();
 
 export class ProductController {
-  async getProducts(_: Request, res: Response) {
-    const productFounds = await productProvider.getProducts();
+  async getProducts(req: Request, res: Response) {
+    const productFounds = await productProvider.getProducts(
+      req.params.idMarket
+    );
     res.json({ products: productFounds });
   }
   async getProductById(req: Request, res: Response) {
@@ -38,7 +40,7 @@ export class ProductController {
     res.json({ product: productUpdated });
   }
   async deleteProduct(req: Request, res: Response) {
-    await productProvider.deleteProduct(req.params.id);
+    await productProvider.deleteProduct(req.params.id, req.params.idMarket);
 
     res.json({ message: "Producto Eliminado" });
   }

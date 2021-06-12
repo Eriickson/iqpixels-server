@@ -1,11 +1,14 @@
 import { ProductRepository } from "../repositories";
 import { IProduct } from "../entities";
 import { Product, Market } from "../models";
+import { Types } from "mongoose";
 
 export class ProductProvider implements ProductRepository {
-  async getProducts() {
+  async getProducts(idMarket: string) {
     try {
-      const productsFound: IProduct = await Product.find();
+      console.log(idMarket);
+
+      const productsFound: IProduct = await Product.find({ market: idMarket });
       return productsFound;
     } catch (err) {
       throw new Error(err);
@@ -24,7 +27,9 @@ export class ProductProvider implements ProductRepository {
 
     try {
       const productFound: IProduct = await newProduct.save();
-      await Market.findByIdAndUpdate(productData.market, { $push: { products: newProduct._id } });
+      await Market.findByIdAndUpdate(productData.market, {
+        $push: { products: newProduct._id },
+      });
 
       return productFound;
     } catch (err) {
@@ -41,7 +46,7 @@ export class ProductProvider implements ProductRepository {
       const productUpdated = await Product.findByIdAndUpdate(
         id,
         { $set: dataToUpdate },
-        { new: true },
+        { new: true }
       );
 
       return productUpdated;
@@ -49,9 +54,19 @@ export class ProductProvider implements ProductRepository {
       throw new Error(err);
     }
   }
-  async deleteProduct(id: string) {
+  async deleteProduct(idToDelete: string, idMarket: string) {
+    console.log({ idMarket, idToDelete });
+
     try {
-      await Product.findByIdAndRemove(id);
+      await Product.findByIdAndRemove(idToDelete);
+      await Market.findByIdAndUpdate(
+        { _id: idMarket },
+        {
+          $pull: {
+            products: idToDelete,
+          },
+        }
+      );
     } catch (err) {
       throw new Error(err);
     }
