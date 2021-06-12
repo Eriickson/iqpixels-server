@@ -10,8 +10,7 @@ export class LoginController {
 
     const userFound = await User.findOne({ email });
 
-    if (userFound)
-      return res.json({ error: "Este correo electrónico ya está registrado" });
+    if (userFound) return res.json({ error: "Este correo electrónico ya está registrado" });
 
     const salt = bcrypt.genSaltSync(12);
     const passwordHash = bcrypt.hashSync(password, salt);
@@ -35,6 +34,8 @@ export class LoginController {
       const token = jwt.sign(payload, envs.SECRECT_TOKEN_LOGIN, {
         expiresIn: "24h",
       });
+      console.log(token);
+      
       res.status(201).json({ token });
     } catch (err) {
       console.log(err);
@@ -44,13 +45,11 @@ export class LoginController {
     const { email, password } = req.body;
     const userFound = await User.findOne({ $and: [{ email }] });
 
-    if (!userFound)
-      throw new Error("Correo electrónico o contraseña incorrectos");
+    if (!userFound) throw new Error("Correo electrónico o contraseña incorrectos");
 
     const passwordHash = bcrypt.compareSync(password, userFound.password);
 
-    if (!passwordHash)
-      throw new Error("Correo electrónico o contraseña incorrectos");
+    if (!passwordHash) throw new Error("Correo electrónico o contraseña incorrectos");
 
     const payload = {
       id: userFound._id,
@@ -60,6 +59,8 @@ export class LoginController {
     const token = jwt.sign(payload, envs.SECRECT_TOKEN_LOGIN, {
       expiresIn: "24h",
     });
+
+    console.log(token);
 
     res.json({ token });
   }
